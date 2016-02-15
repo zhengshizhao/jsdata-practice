@@ -72,7 +72,7 @@ var wipeDB = function() {
 	var models = [PostModel, UserModel];
 
 	return Promise.map(models, function(model) {
-		model.remove({}).exec()
+		return model.remove({}).exec()
 	})
 
 
@@ -85,15 +85,8 @@ var seedDB = function() {
 	  var randomUser = array[random];
 	  return randomUser;
 	}
-	var randomizeData = function(array) {
-		var randomIndex = Math.floor(Math.random() * array.length);
-		var randomData = array[randomIndex];
-		array.splice(randomIndex,1);
-		return randomData;
-	}
-
 		
-	UserModel.create(userSeed)
+	return UserModel.create(userSeed)
 	.then(function(users){
 		return Promise.map(postSeed, function(p) {
 			p.author = randomizeUser(users);
@@ -105,7 +98,7 @@ var seedDB = function() {
 		process.kill(0)
 	})
 	.then(null, function(err) {
-		console.log(err)
+		console.log('ERRRRR!!!: ', err)
 	})
 
 }
