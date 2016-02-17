@@ -5,37 +5,24 @@ app.config(function($stateProvider) {
 		url: '/post/:postId',
 		templateUrl: 'js/post/post.html',
 		controller: 'PostCtrl', 
+		//retrieves all the users so that the author field of the posts 
+		//will be automatically populated
 		resolve: {
-			AllUsers: function(User){
-					return User.findAll();
+            post: function(Post, $stateParams){
+            	return Post.find($stateParams.postId);
+            },
+    		author: function(User, post){
+					return User.find(post.author);
 			}
-		}
-		/*
-				add a resolve block that retrieves all the users
-				so that the author field of the posts will be automatically 
-				populated
-		*/
+		}	
 	})
 });
 
 // add necessary dependencies 
-app.controller('PostCtrl', function($scope, Post, User, $stateParams) {
-		
-		Post.find($stateParams.postId)
-		.then(function(post) {
-       User.find(post.author)
-       .then(function(theUser){
-   
-				$scope.post = post;
-				$scope.post.username = theUser.username;
-				 })
-			});
-
-   
-	/* 1. FIND POST
-		use state params to retrieve the post id and attach post object to scope 
-		on controller load 
-	*/
+app.controller('PostCtrl', function($scope, post, author) {
+	$scope.post = post;
+	$scope.post.username = author.username;
+   /*edit mode*/				
    $scope.editMode = false;
 
    $scope.editPost = function(){
@@ -49,12 +36,5 @@ app.controller('PostCtrl', function($scope, Post, User, $stateParams) {
 
    }
 
-
-	/*
-		2. EDIT POST 
-		create a function that edits the post, adds an alert that the post has been 
-		successfully edited, and displays the edited post.  
-
-	*/
 
 })

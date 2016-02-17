@@ -12,7 +12,7 @@
 
 	<div class="col-lg-8">
 
-		<div ng-repeat="post in allPosts">
+		<div ng-repeat="post in allPosts | orderBy: '-date'">
 			<h3><a ng-click="post.go()">{{ post.title }}</a></h3>
 			<h5>Post Written By: {{ post._author.username }} on: {{ post.date | date }}</h5>
 			{{ post.body }}

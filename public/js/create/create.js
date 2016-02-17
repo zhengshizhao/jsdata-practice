@@ -5,33 +5,29 @@ app.config(function($stateProvider) {
 		url: '/create/:userId',
 		templateUrl: 'js/create/create.html',
 		controller: 'CreateCtrl',
+			// retrieve the author object with users $stateParams
 		resolve: {
-			getAuthor: function(User, $stateParams) {
+			author: function(User, $stateParams) {
 				return User.find($stateParams.userId)
 			}
 		}
-		/*
-				add a resolve block that has an author function which 
-				users $stateParams to retrieve the author object
-		*/
+	
 	})
 })
 
 // add necessary dependencies here 
-app.controller('CreateCtrl', function($scope, $state, Post, getAuthor) {
+app.controller('CreateCtrl', function($scope, $state, Post, author) {
 
 	$scope.previewTrue = false;
-
-	$scope.newPost = {};
-
+	//$scope.newPost = {}; // trust angular does that for you ^^
 	$scope.preview = function() {
 		$scope.previewTrue = !$scope.previewTrue;
 	}
 
+    $scope.newPost = {name: author.username};
 	$scope.createNewPost = function(newPost) {
-		console.log("this is getauthor", getAuthor)
-		newPost.author = getAuthor._id
-		Post.create(newPost)
+		newPost.author = author._id
+		return Post.create(newPost)
 		.then(function() {
 			$state.go('main')
 		})

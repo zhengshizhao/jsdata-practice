@@ -8,9 +8,10 @@ app.config(function($stateProvider) {
 		resolve: {
 			users: function (User) {
 				return User.findAll()
-			},
+			}, //users: User => User.findAll()
 			posts: function (Post, users) {
 				return Post.findAll({})
+				//posts: Post => Post.findAll({})
 			}
 		}
 	})
@@ -18,10 +19,10 @@ app.config(function($stateProvider) {
 
 app.controller('MainController', function($scope, posts, Post) {
 	
-	$scope.allPosts = posts;
+	//$scope.allPosts = posts;
 	//console.log('posts: ', posts);
-
-	var dataInJsDataCache = Post.getAll()
+   Post.bindAll({},$scope, 'allPosts')
+	//var dataInJsDataCache = Post.getAll()
 	//console.log('data in jsdata cache: ', dataInJsDataCache)
 
 })
