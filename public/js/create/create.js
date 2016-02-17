@@ -4,7 +4,7 @@ app.config(function($stateProvider) {
 	$stateProvider.state('create', {
 		url: '/create/:userId',
 		templateUrl: 'js/create/create.html',
-		controller: 'CreateCtrl' 
+		controller: 'CreateCtrl'
 		/*
 				add a resolve block that has an author function which 
 				users $stateParams to retrieve the author object
@@ -13,12 +13,22 @@ app.config(function($stateProvider) {
 })
 
 // add necessary dependencies here 
-app.controller('CreateCtrl', function($scope) {
+app.controller('CreateCtrl', function($scope, $state, Post) {
 
 	$scope.previewTrue = false;
 
+	$scope.newPost = {};
+
 	$scope.preview = function() {
 		$scope.previewTrue = !$scope.previewTrue;
+	}
+
+	$scope.createNewPost = function(newPost) {
+		console.log(newPost);
+		Post.create(newPost)
+		.then(function() {
+			$state.go('main')
+		})
 	}
 
 	/*
